@@ -3,8 +3,8 @@ variable "private_key_path" {
   type        = string
 }
 
-resource "aws_security_group" "strapi_sg" {
-  name        = "bharat-security-group"
+resource "aws_security_group" "strapi_docker" {
+  name        = "test"
   description = "Security group for Strapi EC2 instance"
 
   ingress {
@@ -36,7 +36,7 @@ resource "aws_instance" "strapi" {
   vpc_security_group_ids = [aws_security_group.strapi_sg.id]
 
   tags = {
-    Name = "Strapi-Docker"
+    Name = "strapi-docker"
   }
 
   provisioner "remote-exec" {
