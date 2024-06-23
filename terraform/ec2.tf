@@ -29,7 +29,7 @@ resource "aws_security_group" "strapitest_sg" {
   }
 }
 
-resource "aws_instance" "strapi" {
+resource "aws_instance" "strapi-docker" {
   ami           = "ami-04b70fa74e45c3917"  # Correct AMI ID for ap-south-1
   instance_type = "t2.medium"              # Changed to t2.medium
   key_name      = "strapi-docker"                  # Your key pair name
@@ -61,5 +61,5 @@ resource "aws_instance" "strapi" {
 
 
 output "instance_ip" {
-  value = aws_instance.strapi.public_ip
+  value = aws_instance.strapi-docker.public_ip
 }
