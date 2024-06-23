@@ -3,7 +3,7 @@ variable "private_key_path" {
   type        = string
 }
 
-resource "aws_security_group" "strapi_docker" {
+resource "aws_security_group" "strapi-docker" {
   name        = "test"
   description = "Security group for Strapi EC2 instance"
 
