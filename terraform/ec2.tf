@@ -3,8 +3,7 @@ variable "private_key_path" {
   type        = string
 }
 
-resource "aws_security_group" "strapitest_sg" {
-  name        = "strapi_test"
+resource "aws_security_group" "checking_sg" {
   description = "Security group for Strapi EC2 instance"
 
   ingress {
@@ -33,7 +32,7 @@ resource "aws_instance" "strapi-docker" {
   ami           = "ami-04b70fa74e45c3917"  # Correct AMI ID for ap-south-1
   instance_type = "t2.medium"              # Changed to t2.medium
   key_name      = "strapi-docker"                  # Your key pair name
-  vpc_security_group_ids = [aws_security_group.strapitest_sg.id]
+  vpc_security_group_ids = [aws_security_group.checking_sg.id]
 
   tags = {
     Name = "strapi-docker"
