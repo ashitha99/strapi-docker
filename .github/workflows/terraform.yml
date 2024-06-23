@@ -23,7 +23,7 @@ jobs:
         run: |
           mkdir -p /home/runner/.ssh
           echo "${{ secrets.EC2_KEY }}" > /home/runner/.ssh/strapi-docker.pem
-          chmod 600 /home/runner/.ssh/trapi-docker.pem
+          chmod 600 /home/runner/.ssh/strapi-docker.pem
           ls -al /home/runner/.ssh  
           
       - name: Configure AWS Credentials
