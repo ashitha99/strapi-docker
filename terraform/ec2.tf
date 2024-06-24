@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-2"
+  region = var.region
 }
 
 variable "private_key_path" {
@@ -17,6 +17,7 @@ variable "ami" {
 
 resource "aws_security_group" "docker_sg" {
   description = "Security group for Strapi EC2 instance"
+  name        = "docker_sg"
 
   ingress {
     from_port   = 22
@@ -41,35 +42,33 @@ resource "aws_security_group" "docker_sg" {
 }
 
 resource "aws_instance" "strapi-docker" {
-  ami           = var.ami
-  instance_type = "t2.medium"
-  key_name      = "docker-test"
+  ami                    = var.ami
+  instance_type          = "t2.medium"
+  key_name               = "docker-test"
   vpc_security_group_ids = [aws_security_group.docker_sg.id]
 
   tags = {
     Name = "strapi-docker"
   }
 
- provisioner "remote-exec" {
-  inline = [
-      "sudo apt-get update -y",
-      "sudo apt-get install -y docker.io",
-      "sudo systemctl start docker",
-      "sudo systemctl enable docker",
-      "sudo apt-get install git -y",
-      "sudo docker run -d -p 80:80 -p 1337:1337 ashitha1999/strapi:1.0.0",
-  ]
-}
-
-
+  provisioner "remote-exec" {
     connection {
       type        = "ssh"
       user        = "ubuntu"
       private_key = file(var.private_key_path)
       host        = self.public_ip
     }
-  }
 
+    inline = [
+      "sudo apt-get update -y",
+      "sudo apt-get install -y docker.io",
+      "sudo systemctl start docker",
+      "sudo systemctl enable docker",
+      "sudo apt-get install git -y",
+      "sudo docker run -d -p 80:80 -p 1337:1337 ashitha1999/strapi:1.0.0",
+    ]
+  }
+}
 
 output "instance_ip" {
   value = aws_instance.strapi-docker.public_ip
