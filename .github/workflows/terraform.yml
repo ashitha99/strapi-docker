@@ -22,8 +22,8 @@ jobs:
       - name: Create SSH Key File
         run: |
           mkdir -p /home/runner/.ssh
-          echo "${{ secrets.EC2_KEY }}" > /home/runner/.ssh/strapi-docker.pem
-          chmod 600 /home/runner/.ssh/strapi-docker.pem
+          echo "${{ secrets.EC2_KEY }}" > /home/runner/.ssh/docker-test.pem
+          chmod 600 /home/runner/.ssh/docker-test.pem
           ls -al /home/runner/.ssh  
           
       - name: Configure AWS Credentials
@@ -38,5 +38,5 @@ jobs:
         working-directory: ./terraform  # Update this path if necessary
 
       - name: Apply Terraform
-        run: terraform apply -auto-approve -var="private_key_path=/home/runner/.ssh/strapi-docker.pem"
+        run: terraform apply -auto-approve -var="private_key_path=/home/runner/.ssh/docker-test.pem"
         working-directory: ./terraform  # Update this path if necessary
