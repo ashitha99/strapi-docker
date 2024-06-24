@@ -1,6 +1,18 @@
+provider "aws" {
+  region = "us-east-2"
+}
+
 variable "private_key_path" {
   description = "Path to the private key file"
   type        = string
+}
+
+variable "region" {
+  default = "us-east-2"
+}
+
+variable "ami" {
+  default = "ami-09040d770ffe2224f"
 }
 
 resource "aws_security_group" "docker_sg" {
@@ -29,9 +41,9 @@ resource "aws_security_group" "docker_sg" {
 }
 
 resource "aws_instance" "strapi-docker" {
-  ami           = "ami-09040d770ffe2224f"  # Correct AMI ID for ap-south-1
-  instance_type = "t2.medium"              # Changed to t2.medium
-  key_name      = "docker-test"                  # Your key pair name
+  ami           = var.ami
+  instance_type = "t2.medium"
+  key_name      = "docker-test"
   vpc_security_group_ids = [aws_security_group.docker_sg.id]
 
   tags = {
@@ -39,25 +51,23 @@ resource "aws_instance" "strapi-docker" {
   }
 
   provisioner "remote-exec" {
-  inline = [
-      "sudo apt-get update -y",
-      "sudo apt-get install -y docker.io",
-      "sudo systemctl start docker",
-      "sudo systemctl enable docker",
-      "sudo apt-get install git -y",
-      "sudo docker run -d -p 80:80 -p 1337:1337 ashitha1999/strapi:1.0.0",
-  ]
-}
-
-
     connection {
       type        = "ssh"
       user        = "ubuntu"
       private_key = file(var.private_key_path)
       host        = self.public_ip
     }
-  }
 
+    inline = [
+      "sudo apt-get update -y",
+      "sudo apt-get install -y docker.io",
+      "sudo systemctl start docker",
+      "sudo systemctl enable docker",
+      "sudo apt-get install git -y",
+      "sudo docker run -d -p 80:80 -p 1337:1337 ashitha1999/strapi:1.0.0",
+    ]
+  }
+}
 
 output "instance_ip" {
   value = aws_instance.strapi-docker.public_ip
