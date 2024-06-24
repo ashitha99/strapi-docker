@@ -52,23 +52,24 @@ resource "aws_instance" "strapi-docker" {
   }
 
   provisioner "remote-exec" {
+  inline = [
+      "sudo apt-get update -y",
+      "sudo apt-get install -y docker.io",
+      "sudo systemctl start docker",
+      "sudo systemctl enable docker",
+      "sudo apt-get install git -y",
+      "sudo docker run -d -p 80:80 -p 1337:1337 veera1016/strapi:1.0.0",
+  ]
+}
+
+
     connection {
       type        = "ssh"
       user        = "ubuntu"
       private_key = file(var.private_key_path)
       host        = self.public_ip
     }
-
-    inline = [
-      "sudo apt-get update -y",
-      "sudo apt-get install -y docker.io",
-      "sudo systemctl start docker",
-      "sudo systemctl enable docker",
-      "sudo apt-get install git -y",
-      "sudo docker run -d -p 80:80 -p 1337:1337 ashitha1999/strapi:1.0.0",
-    ]
   }
-}
 
 output "instance_ip" {
   value = aws_instance.strapi-docker.public_ip
