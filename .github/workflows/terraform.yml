@@ -22,8 +22,8 @@ jobs:
       - name: Create SSH Key File
         run: |
           mkdir -p /home/runner/.ssh
-          echo "${{ secrets.AWS_EC2_KEY }}" > /home/runner/.ssh/docker-test.pem
-          chmod 600 /home/runner/.ssh/docker-test.pem
+          echo "${{ secrets.AWS_EC2_KEY }}" > /home/runner/.ssh/strapi-docker.pem
+          chmod 600 /home/runner/.ssh/strapi-docker.pem
           ls -al /home/runner/.ssh  
           
       - name: Configure AWS Credentials
@@ -31,12 +31,12 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-2
+          aws-region: eu-west-2
           
       - name: Initialize Terraform
         run: terraform init
         working-directory: ./terraform  # Update this path if necessary
 
       - name: Apply Terraform
-        run: terraform apply -auto-approve -var="private_key_path=/home/runner/.ssh/docker-test.pem"
+        run: terraform apply -auto-approve -var="private_key_path=/home/runner/.ssh/strapi-docker.pem"
         working-directory: ./terraform  # Update this path if necessary
