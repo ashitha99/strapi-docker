@@ -31,7 +31,7 @@ resource "aws_security_group" "strapi_sg" {
 }
 
 resource "aws_instance" "strapi" {
-  ami           = "ami-04b70fa74e45c3917"  # Correct AMI ID for ap-south-1
+  ami           = "ami-0cf2b4e024cdb6960"  
   instance_type = "t2.medium"              # Changed to t2.medium
   key_name      = "docker-test"                  # Your key pair name
   vpc_security_group_ids = [aws_security_group.strapi_sg.id]
