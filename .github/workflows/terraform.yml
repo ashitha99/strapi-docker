@@ -22,7 +22,7 @@ jobs:
       - name: Create SSH Key File
         run: |
           mkdir -p /home/runner/.ssh
-          echo "${{ secrets.AWS_EC2_KEY }}" > /home/runner/.ssh/docker-test.pem
+          echo "${{ secrets.ASHITHA_EC2_KEY }}" > /home/runner/.ssh/docker-test.pem
           chmod 600 /home/runner/.ssh/docker-test.pem
           ls -al /home/runner/.ssh  
           
